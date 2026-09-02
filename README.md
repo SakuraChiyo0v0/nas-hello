@@ -31,3 +31,19 @@ node server.mjs    # http://localhost:3000
 3. push 代码，等 Actions 完成，30~60s 内 NAS 自动更新
 
 > Watchtower 只重建带 com.centurylinklabs.watchtower.enable=true 标签的容器，不影响其它容器。
+
+## 已跑通（2026-09-02）
+
+验证结果：bump version -> push -> Actions 构建推 GHCR -> Watchtower 30s 内自动重建 -> 访问返回新版本。
+
+```json
+{ "app": "nas-hello", "version": "0.2.0", "commit": "4833f7d" }
+```
+
+### 踩坑：watchtower 在绿联 UGOS 上崩溃
+
+现象：容器 exit 1 循环重启、日志只有 `Error response from daemon: client version 1.25 is too old. Minimum supported API version is 1.40`。
+
+原因：containrrr/watchtower 镜像内置 `DOCKER_API_VERSION=1.25`，UGOS 的 dockerd 最低要求 1.40。
+
+解决：compose 里覆盖环境变量 `DOCKER_API_VERSION=1.43`（见 watchtower.compose.yml）。

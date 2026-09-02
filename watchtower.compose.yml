@@ -1,4 +1,5 @@
 # Watchtower：轮询 ghcr，发现 nas-hello 新镜像后自动拉取并重建（仅监控打了 label 的容器）
+# 注意：镜像内置 DOCKER_API_VERSION=1.25，UGOS dockerd 最低要求 1.40，必须覆盖为高版本
 services:
   watchtower:
     image: containrrr/watchtower:latest
@@ -7,6 +8,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
+      - DOCKER_API_VERSION=1.43
       - WATCHTOWER_POLL_INTERVAL=30
       - WATCHTOWER_CLEANUP=true
       - WATCHTOWER_LABEL_ENABLE=true
