@@ -1,0 +1,13 @@
+# Watchtower：轮询 ghcr，发现 nas-hello 新镜像后自动拉取并重建（仅监控打了 label 的容器）
+services:
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=30
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_LABEL_ENABLE=true
+      - TZ=Asia/Hong_Kong

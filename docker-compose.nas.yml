@@ -1,0 +1,13 @@
+# NAS 端部署（放到 /volume1/docker/nas-hello/docker-compose.yaml）
+# 由 watchtower 发现 ghcr 新镜像后自动重建
+services:
+  nas-hello:
+    image: ghcr.io/sakurachiyo0v0/nas-hello:latest
+    container_name: nas-hello
+    restart: unless-stopped
+    ports:
+      - "8899:3000"
+    environment:
+      - TZ=Asia/Hong_Kong
+    labels:
+      - com.centurylinklabs.watchtower.enable=true
